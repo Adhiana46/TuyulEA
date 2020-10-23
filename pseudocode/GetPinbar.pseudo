@@ -1,0 +1,42 @@
+"""
+Get Pinbar Function.
+Return:
+    - Bullish Pinbar (Hammer)
+    - Bearish Pinbar (Shooting-Star)
+
+Bullish Pinbar (Hammer):
+    - Upper Shadow less than 20%
+    - body is between 10%-35%
+
+Bearish Pinbar (Shooting-Star):
+    - Lower Shadow less than 20%
+    - body is between 10%-35%
+"""
+def GetPinbar(x):
+    o = Open[x]
+    h = High[x]
+    l = Low[x]
+    c = Close[x]
+
+    body = abs(c - o)
+    length = abs(h - l)
+    upper_shadow = 0
+    lower_shadow = 0
+
+    if o > c:
+        upper_shadow = abs(h - o)
+    else:
+        upper_shadow = abs(h - c)
+
+    if o < c:
+        lower_shadow = abs(o - l)
+    else:
+        lower_shadow = abs(c - l)
+    
+    if (upper_shadow / length) < 0.20 and (body / length) >= 0.1 and (body / length) <= 0.35:
+        return BullishPinbar
+
+    if (lower_shadow / length) < 0.20 and (body / length) >= 0.1 and (body / length) <= 0.35:
+        return BearishPinbar
+
+    return None

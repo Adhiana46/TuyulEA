@@ -1,0 +1,51 @@
+"""
+Get Trend
+
+Params:
+    - Period => How many period to calculate
+    - Timeframe => which timeframe to use (15m, 30m, 1h, 4h, 1d)
+    - MA_TYPE => Moving Average we use (sma, ema, wma)
+    - MA_PERIOD => Moving Average Period to use
+
+Uptrend Condition:
+    - Moving Average is rising >= 80%
+    - Closing Price Above Moving Average >= 80%
+
+Downtrend Condition:
+    - Moving Average is decreasing >= 80%
+    - Closing Price Below Moving Average >= 80%
+"""
+GetTrend(period=9, timeframe="1h", ma_type="ema", ma_period=9):
+    price_above_ma = 0 # how many prices is above MA
+    ma_up = 0 # how many MA is greater than prev MA
+
+    price_below_ma = 0 # how many prices is below MA
+    ma_down = 0 # how many MA is less than prev MA
+
+    for (i = period; i >= 0; i--):
+        prev_ma = get_moving_average(i + 1)
+        ma = get_moving_average(i, ma_type, ma_period)
+
+        if ma > prev_ma:
+            ma_up++
+        elif ma < prev_ma:
+            ma_down++
+
+        if Close[i] > ma:
+            price_above_ma++
+        elif Close[i] < ma:
+            price_below_ma++
+
+
+    price_above_percent = price_above_ma / period
+    ma_up_percent = ma_up / period
+
+    price_below_percent = price_below_ma / period
+    ma_down_percent = ma_down / period
+
+    if price_above_percent >= 0.8 and ma_up_percent >= 0.8:
+        return UPTREND
+    elif price_below_percent >= 0.8 and ma_down_percent >= 0.8:
+        return DOWNTREND
+
+    return None
