@@ -1,0 +1,6 @@
+DOWNTREND = -1
+UPTREND = 1
+
+BEARISH_PINBAR = -1 # Shooting-star
+BULLISH_PINBAR = 1 # Hammer
+

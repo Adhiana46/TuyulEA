@@ -1,0 +1,26 @@
+"""
+1. Determine the trend
+2.a. IF Trend is UP
+2.a.1. Check if Prev Candle is Bearish Pinbar (Shooting-star)
+"""
+def start():
+    if get_open_position(PAIR) > 0:
+        return
+
+    trend = GetTrend(period=9, timeframe="1h", ma_type="ema", ma_period=9)
+
+    switch (trend):
+        case UPTREND:
+            isShootingStar = GetPinbar(1) == BearishPinbar
+            if (isShootingStar):
+                sl = get_last_swing_high(3)
+                tp = sl * 1.5
+                open_position('sell', bid_price, sl, tp)
+            break
+        case DOWNTREND:
+            isHammer = GetPinbar(1) == BullishPinbar
+            if (isHammer):
+                sl = get_last_swing_low(3)
+                tp = sl * 1.5
+                open_position('buy', ask_price, sl, tp)
+            break
